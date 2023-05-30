@@ -4,20 +4,29 @@ import requests
 from bs4 import BeautifulSoup as bs
 from urllib.request import urlopen as uReq
 import logging
-logging.basicConfig(filename="scrapper.log" , level=logging.INFO)
+import pymongo 
+# required library import
+logging.basicConfig(filename="log_file.log" , level=logging.INFO) # loggin basic config
+app = Flask(__name__) # flask app config
 
-app = Flask(__name__)
 
+# flask app routing 
+# for main page 
 @app.route("/", methods = ['GET'])
+@cross_origin()
 def homepage():
     return render_template("index.html")
 
+
+# flask app routing 
+# for result page 
 @app.route("/review" , methods = ['POST' , 'GET'])
+@cross_origin()
 def index():
-    if request.method == 'POST':
+    if request.method == 'POST': 
         try:
-            searchString = request.form['content'].replace(" ","")
-            flipkart_url = "https://www.flipkart.com/search?q=" + searchString
+            product_name = request.form['content'].replace(" ","")
+            flipkart_url = "https://www.flipkart.com/search?q=" + product_name
             uClient = uReq(flipkart_url)
             flipkartPage = uClient.read()
             uClient.close()
@@ -29,24 +38,19 @@ def index():
             prodRes = requests.get(productLink)
             prodRes.encoding='utf-8'
             prod_html = bs(prodRes.text, "html.parser")
-            print(prod_html)
             commentboxes = prod_html.find_all('div', {'class': "_16PBlm"})
 
-            filename = searchString + ".csv"
-            fw = open(filename, "w")
-            headers = "Product, Customer Name, Rating, Heading, Comment \n"
-            fw.write(headers)
+            filename = product_name + ".txt"
+            file_pointer = open(filename, "w")
             reviews = []
             for commentbox in commentboxes:
                 try:
-                    #name.encode(encoding='utf-8')
                     name = commentbox.div.div.find_all('p', {'class': '_2sc7ZR _2V5EHH'})[0].text
 
                 except:
                     logging.info("name")
 
                 try:
-                    #rating.encode(encoding='utf-8')
                     rating = commentbox.div.div.div.div.text
 
 
@@ -55,7 +59,6 @@ def index():
                     logging.info("rating")
 
                 try:
-                    #commentHead.encode(encoding='utf-8')
                     commentHead = commentbox.div.div.div.p.text
 
                 except:
@@ -63,24 +66,34 @@ def index():
                     logging.info(commentHead)
                 try:
                     comtag = commentbox.div.div.find_all('div', {'class': ''})
-                    #custComment.encode(encoding='utf-8')
                     custComment = comtag[0].div.text
                 except Exception as e:
                     logging.info(e)
 
-                mydict = {"Product": searchString, "Name": name, "Rating": rating, "CommentHead": commentHead,
-                          "Comment": custComment}
+                mydict = {"Product": product_name, "Name": name, "Rating": rating, "review_title": commentHead,
+                          "Discription": custComment}
+                for key, value in mydict.items(): 
+                    file_pointer.write('%s:%s\n' % (key, value))
+                file_pointer.write("\n \n")
                 reviews.append(mydict)
-            logging.info("log my final result {}".format(reviews))
+            logging.info("logging final result {}".format(reviews))
+            file_pointer.close()
+
+            # mondo db data store 
+            client = pymongo.MongoClient("mongodb+srv://rajput89207:rajput89207@cluster0.q4cidjn.mongodb.net/?retryWrites=true&w=majority")
+            db = client['reviews']
+            review_col = db['scrap_data']
+            review_col.insert_many(reviews)
+
+
             return render_template('result.html', reviews=reviews[0:(len(reviews)-1)])
         except Exception as e:
             logging.info(e)
-            return 'something is wrong'
-    # return render_template('results.html')
+            return 'something is wrong, try again...'
 
     else:
         return render_template('index.html')
 
 
 if __name__=="__main__":
-    app.run(host="0.0.0.0")
+    app.run(host="0.0.0.0" , debug= True )

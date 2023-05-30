@@ -21,27 +21,23 @@
 
    <table cellspacing="0">
       <tr>
-         <th>Product</th>
-         <th>Name</th>
+         <th>Product Name</th>
+         <th>Buyer's Name</th>
          <th>Rating</th>
-         <th>Comment Heading</th>
-         <th>mycomment </th>
-         <th width="230">Comments</th>
+         <th>Review Heading</th>
+         <th width="230">Discription</th>
       </tr>
          {% for review in reviews %}
       <tr>
           <td>{{review['Product']}}</td>
          <td>{{review['Name']}}</td>
          <td>{{review['Rating']}}</td>
-         <td>{{review['CommentHead']}}</td>
-         <td>{{review['Comment']}} </td>
-         <td>{{review['Comment']}} </td>
+         <td>{{review['review_title']}}</td>
+         <td>{{review['Discription']}} </td>
        {% endfor %}
    </table>
 </div>
-
-
-
+<div id="bottom">All the reviews are from Flipkart.com</div>
 </body>
 
 </html>
