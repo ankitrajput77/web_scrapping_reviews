@@ -4,10 +4,10 @@ It utilizes the BeautifulSoup library for parsing HTML and the requests library 
 
 
 # Table of Contents
-Installation
-Usage
-Contributing
-License
+. Installation
+. Usage
+. Contributing
+. License
 
 # Installation
 
