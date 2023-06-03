@@ -1,43 +1,103 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <title>Review Page</title>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <style>
+    /* Add custom CSS styles for the table */
+    body {
+      font-family: Arial, sans-serif;
+    }
 
+    .table-users {
+      margin: auto;
+      max-width: 800px;
+      width: 100%;
+      box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      overflow: hidden;
+    }
 
-      <link rel="stylesheet" href="./style.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    .table-users .header {
+      background-color: #f8f8f8;
+      font-size: 22px;
+      padding: 20px;
+      text-align: center;
+      color: #333; /* Change the color of the title */
+    }
 
+    .table-users table {
+      width: 100%;
+    }
 
+    .table-users table thead th {
+      padding: 15px;
+      background-color: #f8f8f8;
+      font-size: 14px;
+      text-align: left;
+      border-bottom: 1px solid #e6e6e6;
+    }
+
+    .table-users table tbody tr {
+      transition: all 0.3s ease;
+    }
+
+    .table-users table tbody tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    .table-users table tbody tr:hover {
+      background-color: #eaf6ff;
+    }
+
+    .table-users table tbody tr td {
+      padding: 15px;
+      font-size: 14px;
+      border-bottom: 1px solid #e6e6e6;
+    }
+
+    #bottom {
+      text-align: center;
+      padding: 20px;
+      font-size: 12px;
+      color: #999;
+    }
+  </style>
 </head>
 
 <body>
-
   <div class="table-users">
-   <div class="header">Reviews</div>
+    <div class="header">Reviews</div>
 
-   <table cellspacing="0">
-      <tr>
-         <th>Product Name</th>
-         <th>Buyer's Name</th>
-         <th>Rating</th>
-         <th>Review Heading</th>
-         <th width="230">Discription</th>
-      </tr>
-         {% for review in reviews %}
-      <tr>
+    <table cellspacing="0">
+      <thead>
+        <tr>
+          <th>Product Name</th>
+          <th>Buyer's Name</th>
+          <th>Rating</th>
+          <th>Review Heading</th>
+          <th width="450">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for review in reviews %}
+        <tr>
           <td>{{review['Product']}}</td>
-         <td>{{review['Name']}}</td>
-         <td>{{review['Rating']}}</td>
-         <td>{{review['review_title']}}</td>
-         <td>{{review['Discription']}} </td>
-       {% endfor %}
-   </table>
-</div>
-<div id="bottom">All the reviews are from Flipkart.com</div>
+          <td>{{review['Name']}}</td>
+          <td>{{review['Rating']}}</td>
+          <td>{{review['review_title']}}</td>
+          <td>{{review['Description']}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div id="bottom">All the reviews are from Flipkart.com</div>
 </body>
 
 </html>
