@@ -81,7 +81,7 @@ def index():
 
             # mondo db data store 
             try :
-                client = pymongo.MongoClient("mongodb+srv://rajput89207:rajput89207@cluster0.q4cidjn.mongodb.net/?retryWrites=true&w=majority")
+                client = pymongo.MongoClient("mongodb+srv://<username>:<password>@cluster0.q4cidjn.mongodb.net/?retryWrites=true&w=majority")
                 db = client['reviews']
                 review_col = db['scrap_data']
                 review_col.insert_many(reviews)
