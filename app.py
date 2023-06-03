@@ -80,11 +80,13 @@ def index():
             file_pointer.close()
 
             # mondo db data store 
-            client = pymongo.MongoClient("mongodb+srv://rajput89207:<password>@cluster0.q4cidjn.mongodb.net/?retryWrites=true&w=majority")
-            db = client['reviews']
-            review_col = db['scrap_data']
-            review_col.insert_many(reviews)
-
+            try :
+                client = pymongo.MongoClient("mongodb+srv://rajput89207:rajput89207@cluster0.q4cidjn.mongodb.net/?retryWrites=true&w=majority")
+                db = client['reviews']
+                review_col = db['scrap_data']
+                review_col.insert_many(reviews)
+            except :
+                logging.info("your mongo db link has some issue") 
 
             return render_template('result.html', reviews=reviews[0:(len(reviews)-1)])
         except Exception as e:
@@ -96,4 +98,4 @@ def index():
 
 
 if __name__=="__main__":
-    app.run(host="0.0.0.0" , debug= True )
+    app.run(host="0.0.0.0" )
