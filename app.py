@@ -71,7 +71,7 @@ def index():
                     logging.info(e)
 
                 mydict = {"Product": product_name, "Name": name, "Rating": rating, "review_title": commentHead,
-                          "Discription": custComment}
+                          "Description": custComment}
                 for key, value in mydict.items(): 
                     file_pointer.write('%s:%s\n' % (key, value))
                 file_pointer.write("\n \n")
