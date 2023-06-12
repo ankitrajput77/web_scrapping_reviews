@@ -41,7 +41,7 @@ def index():
             commentboxes = prod_html.find_all('div', {'class': "_16PBlm"})
 
             filename = product_name + ".txt"
-            file_pointer = open(filename, "w")
+            file_pointer = open(filename, "w", encoding="utf-8")
             reviews = []
             for commentbox in commentboxes:
                 try:
