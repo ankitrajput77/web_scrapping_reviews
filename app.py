@@ -48,6 +48,7 @@ def index():
                     name = commentbox.div.div.find_all('p', {'class': '_2sc7ZR _2V5EHH'})[0].text
 
                 except:
+                    name = 'not given'
                     logging.info("name")
 
                 try:
@@ -68,6 +69,7 @@ def index():
                     comtag = commentbox.div.div.find_all('div', {'class': ''})
                     custComment = comtag[0].div.text
                 except Exception as e:
+                    custComment = "no comment"
                     logging.info(e)
 
                 mydict = {"Product": product_name, "Name": name, "Rating": rating, "review_title": commentHead,
@@ -81,7 +83,7 @@ def index():
 
             # mondo db data store 
             try :
-                client = pymongo.MongoClient("mongodb+srv://<username>:<password>@cluster0.q4cidjn.mongodb.net/?retryWrites=true&w=majority")
+                client = pymongo.MongoClient("mongodb+srv://rajput89207:rajput89207@cluster0.q4cidjn.mongodb.net/?retryWrites=true&w=majority")
                 db = client['reviews']
                 review_col = db['scrap_data']
                 review_col.insert_many(reviews)
